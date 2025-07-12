@@ -18,3 +18,12 @@
 - Build a community where individuals can exchange ideas, discuss important topics, and share personal experiences.
 - Provide a digital space where voices can be amplified, and discussions can inspire change and new perspectives.
 - Foster meaningful interactions through storytelling and open conversations.
+
+## Tech Stack Used
+
+**Visions & Voices** is developed using the following technologies:
+
+- **Frontend:** HTML, CSS, Bootstrap, JavaScript  
+- **Backend:** Django  
+- **Database:** SQLite
+
