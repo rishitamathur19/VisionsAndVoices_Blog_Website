@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block css %}
+/* ADJUSTING CAROUSEL CONTAINER'S HEIGHT */
+.carousel-inner .carousel-item {
+height: 400px;
+object-fit: cover;
+}
+
+.carousel-item img {
+height: 100%;
+width: 100%;
+}
+
+{% endblock %}
+{% block body %}
+<!-- CAROUSEL CONTAINER STARTS HERE -->
+<div id="carouselExampleDark" class="carousel slide" data-bs-theme="dark">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        {% for blog_post in posts %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="10000">
+                {% if blog_post.image %}
+                    <img src="{{ blog_post.image.url }}" class="img-fluid d-block w-100" alt="{{ blog_post.title }}" style="object-fit: fit; height: 400px;">
+                {% else %}
+                    <img src="{% static 'images/favicon.png' %}" class="img-fluid d-block w-100" alt="{{ blog_post.title }}" style="object-fit: fit; height: 400px;">
+                {% endif %}
+                <div class="carousel-caption d-none d-md-block">
+                    <h5><a href="{% url 'blog_detail' id=blog_post.id %}">{{ blog_post.title }}</a></h5>
+                    <p>{{ blog_post.content|truncatewords:10 }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<!-- CAROUSEL CONTAINER ENDS HERE -->
+
+
+<!-- POSTS CONTAINER STARTS HERE -->
+<div class="container mt-4">
+    <div class="row mb-2">
+        {% for blog_post in posts|slice:":4" %}
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    {% if blog_post.category %}
+                        <strong class="d-inline-block mb-2 text-primary-emphasis">{{ blog_post.category }}</strong>
+                    {% else %}
+                        <strong class="d-inline-block mb-2 text-secondary">Uncategorized</strong>
+                    {% endif %}
+                        <h3 class="fw-bold pt-2">
+                            {{ blog_post.title }}
+                        </h3>
+                    <div class="mb-1 text-body-secondary">{{ blog_post.created_at|date:"M d, Y" }}</div>
+                    <p class="card-text mb-auto">{{ blog_post.content|truncatewords:20 }}</p>
+                    <a href="{% url 'blog_detail' id=blog_post.id %}" class="icon-link gap-1 icon-link-hover stretched-link">
+                        Continue reading
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    {% if blog_post.image %}
+                        <img src="{{ blog_post.image.url }}" class="bd-placeholder-img" width="200" height="250" style="object-fit: contain;" alt="{{ blog_post.title }}">
+                    {% else %}
+                        <img src="{% static 'images/favicon.png' %}" class="bd-placeholder-img" width="200" height="250" style="object-fit: contain;" alt="No Image Available">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mb-2">
+        {% for blog_post in posts|slice:"4:8" %}
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-100 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    {% if blog_post.category %}
+                        <strong class="d-inline-block mb-2 text-success-emphasis">{{ blog_post.category }}</strong>
+                    {% else %}
+                        <strong class="d-inline-block mb-2 text-secondary">Uncategorized</strong>
+                    {% endif %}
+                    <h3 class="mb-0"> {{ blog_post.title }} </h3>
+                    <div class="mb-1 text-body-secondary">{{ blog_post.created_at|date:"M d, Y" }}</div>
+                    <p class="card-text mb-auto">{{ blog_post.content|truncatewords:15 }}</p>
+                    <a href="{% url 'blog_detail' id=blog_post.id %}" class="icon-link gap-1 icon-link-hover stretched-link">
+                        Continue reading
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    {% if blog_post.image %}
+                        <img src="{{ blog_post.image.url }}" class="bd-placeholder-img" width="200" height="250" style="object-fit: cover;" alt="{{ blog_post.title }}">
+                    {% else %}
+                        <img src="{% static 'images/favicon.png' %}" class="bd-placeholder-img" width="200" height="250" style="object-fit: cover;" alt="No Image Available">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- POSTS CONTAINER ENDS HERE -->
+
+
+<!-- NAVIGATE CONTAINER STARTS HERE -->
+<div class="container px-4 py-5">
+    <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 pb-5">
+      <div class="col d-flex flex-column align-items-start gap-2">
+        <h2 class="fw-bold">Visions & Voices is not just a blog</h2>
+        <p>It’s a community of thinkers, dreamers, and doers. Here, we believe that everyone has a story worth sharing and a vision worth hearing.</p>
+        <p class="text-body-secondary">Whether you’re seeking inspiration, knowledge, or simply a new perspective, we invite you to explore, engage, and become part of a global conversation that matters.</p>
+        <a href="{% url 'blog' %}" class="btn btn-outline-primary btn-md">Explore Blogs</a>
+      </div>
+
+      <div class="col">
+        <div class="row row-cols-1 row-cols-sm-2 g-4">
+          <div class="col d-flex flex-column gap-2">
+            <div class="feature-icon-small d-inline-flex">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="gray" class="bi bi-house-door" viewBox="0 0 16 16">
+                    <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4z"/>
+                  </svg>
+            </div>
+            <a class="fw-semibold h4 mb-0 text-body-emphasis" href="{% url 'index' %}">Home</a>
+            <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+          </div>
+
+          <div class="col d-flex flex-column gap-2">
+            <div class="feature-icon-small d-inline-flex">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="gray" class="bi bi-folder2-open" viewBox="0 0 16 16">
+                    <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v.64c.57.265.94.876.856 1.546l-.64 5.124A2.5 2.5 0 0 1 12.733 15H3.266a2.5 2.5 0 0 1-2.481-2.19l-.64-5.124A1.5 1.5 0 0 1 1 6.14zM2 6h12v-.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.71-.629-2.174-1.154C6.374 3.334 5.82 3 5.264 3H2.5a.5.5 0 0 0-.5.5zm-.367 1a.5.5 0 0 0-.496.562l.64 5.124A1.5 1.5 0 0 0 3.266 14h9.468a1.5 1.5 0 0 0 1.489-1.314l.64-5.124A.5.5 0 0 0 14.367 7z"/>
+                  </svg>
+            </div>
+            <a class="fw-semibold h4 mb-0 text-body-emphasis" href="{% url 'explore' %}">Explore</a>
+            <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+          </div>
+
+          <div class="col d-flex flex-column gap-2">
+            <div class="feature-icon-small d-inline-flex">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="gray" class="bi bi-file-earmark-person" viewBox="0 0 16 16">
+                    <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2v9.255S12 12 8 12s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h5.5z"/>
+                  </svg>
+            </div>
+            <a class="fw-semibold h4 mb-0 text-body-emphasis" href="{% url 'about' %}">About</a>
+            <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+          </div>
+
+          <div class="col d-flex flex-column gap-2">
+            <div class="feature-icon-small d-inline-flex">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="gray" class="bi bi-person-circle" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                  </svg>
+            </div>
+            <a class="fw-semibold h4 mb-0 text-body-emphasis" href="{% url 'profile' %}">Profile</a>
+            <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- NAVIGATE CONTAINER ENDS HERE -->
+
+<div class="container-fluid"></div>
+{% endblock %}

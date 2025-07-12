@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Profile {% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <!-- DISPLAYING USER INFORMATION -->
+    <div class="profile-info container mt-4 pt-4">
+        <div class="row">
+            <div class="col-3">
+                {% if user.profile.profile_image %}
+                <img class="img-thumbnail rounded-circle" src="{{ user.profile.profile_image.url }}" alt="Profile Image" />
+                {% else %}
+                <img class="img-thumbnail rounded-circle" src="{% static 'images/favicon.png' %}" />
+                {% endif %}
+            </div>
+            <div class="col-9">
+                <h3 class="mb-0">{{ user.profile.name }}</h3>
+                <h6 class="text-secondary">@{{ user.username }}</h6>
+                <h5 class="py-1">{{ user.profile.bio }}</h5>
+                <h6>{{ user.posts.count }} Posts</h6>
+                <h6 class="text-secondary">Joined {{ user.date_joined|date:"j F, Y" }}</h6>
+            </div>
+        </div>
+    </div>
+    <!-- BUTTONS FOR UPLOADING/UPDATING STARTS -->
+    {% if profile.user == user %}
+    <div class="d-flex justify-content-end me-5">
+        <!-- UPDATE PROFILE BUTTON -->
+        <button type="button" class="btn btn-secondary px-3 me-4" data-bs-toggle="modal"
+            data-bs-target="#updateProfileModal">Edit Profile</button>
+        <div class="modal fade modal-xl" id="updateProfileModal" tabindex="-1" aria-labelledby="updateProfileLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 fw-bolder" id="updateProfileLabel">Edit Profile</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="p-2" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="id_name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="id_name" name="name" placeholder="Enter your name"
+                                    value="{{ form.name.value|default_if_none:'' }}" required>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label for="id_bio" class="form-label">Bio</label>
+                                <textarea class="form-control" id="id_bio" name="bio" rows="3" placeholder="Write a short bio" required>
+                                    {{ form.bio.value|default_if_none:'' }}
+                                </textarea>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label for="id_profile_image" class="form-label">Profile Image</label>
+                                <input type="file" class="form-control" id="id_profile_image" name="profile_image" accept="image/*">
+                            </div>
+                        
+                            <button type="submit" name="update_profile" class="btn btn-primary">Update Profile</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- CREATE POST BUTTON -->
+        <button type="button" class="btn btn-secondary px-3" data-bs-toggle="modal"
+            data-bs-target="#createPostModal">Create
+            Post</button>
+        <div class="modal fade modal-xl" id="createPostModal" tabindex="-1" aria-labelledby="createPostLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 fw-bolder" id="createPostLabel">Create Post</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="p-2" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="id_title" class="form-label">Post Title</label>
+                                <input type="text" class="form-control" id="id_title" name="title" placeholder="Enter the title of your post" value="{{ form.title.value|default_if_none:'' }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_content" class="form-label">Post Content</label>
+                                <textarea class="form-control" id="id_content" name="content" rows="4" placeholder="Write your post content here" required>{{ form.content.value|default_if_none:'' }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_image" class="form-label">Post Image (Optional)</label>
+                                <input type="file" class="form-control" id="id_image" name="image" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_category" class="form-label">Category</label>
+                                <select class="form-select" id="id_category" name="category" required>
+                                    <option value="" selected disabled>Choose a category</option>
+                                    <option value="Personal Stories & Experiences" {% if form.category.value == "Personal Stories & Experiences" %}selected{% endif %}>Personal Stories & Experiences</option>
+                                    <option value="Cultural & Social Commentary" {% if form.category.value == "Cultural & Social Commentary" %}selected{% endif %}>Cultural & Social Commentary</option>
+                                    <option value="Futuristic & Visionary Ideas" {% if form.category.value == "Futuristic & Visionary Ideas" %}selected{% endif %}>Futuristic & Visionary Ideas</option>
+                                    <option value="Inspiration & Motivation" {% if form.category.value == "Inspiration & Motivation" %}selected{% endif %}>Inspiration & Motivation</option>
+                                    <option value="Philosophical & Deep Thought Pieces" {% if form.category.value == "Philosophical & Deep Thought Pieces" %}selected{% endif %}>Philosophical & Deep Thought Pieces</option>
+                                    <option value="Book Reviews & Recommendations" {% if form.category.value == "Book Reviews & Recommendations" %}selected{% endif %}>Book Reviews & Recommendations</option>
+                                    <option value="Travel & Cultural Exploration" {% if form.category.value == "Travel & Cultural Exploration" %}selected{% endif %}>Travel & Cultural Exploration</option>
+                                </select>
+                            </div>
+                            <button type="submit" name="create_post" class="btn btn-primary">Create Post</button>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- BUTTONS FOR UPLOADING/UPDATING ENDS -->
+    <br>
+    <!-- DISPLAYING USER DASHBOARD -->
+    <div class="card mx-lg-4 mb-4">
+        <div class="card-header" style="background-color: var(--soft-white);">
+            <ul class="nav nav-underline">
+                <li class="nav-item">
+                    <a class="nav-link active pb-1" id="profile-tab" data-bs-toggle="tab" href="#blog-posts"
+                        style="color: var(--warm-gold);">Posts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pb-1" id="profile-tab" data-bs-toggle="tab" href="#saved-posts"
+                        style="color: var(--warm-gold);">Saved</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body px-lg-5">
+            <div class="tab-content">
+                <!-- DISPLAYING USER'S BLOG POSTS -->
+                <div class="tab-pane fade show active mb-2" id="blog-posts">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-2">
+                        {% if posts %}
+                        {% for post in posts %}
+                            <div class="col">
+                                <div class="card shadow-sm d-flex flex-column h-100">
+                                    {% if post.image %}
+                                        <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ post.image.url }}" alt="{{ post.title }}" />
+                                    {% else %}
+                                        <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{% static 'images/favicon.png' %}" alt="Default image" />
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center fw-bold">{{ post.title }}</h5>
+                                        <div class="icon-row row p-1">
+                                            <div class="icon col text-end">
+                                                {{ post.like_count }} <i class="fas fa-heart" style="color: red;"></i> <!-- HEART ICON -->
+                                            </div>
+                                            <div class="icon col text-start">
+                                                {{ post.comments.count  }} <i class="far fa-comment"></i> <!-- COMMENT ICON -->
+                                            </div>
+                                          </div>
+                                        <p class="card-text">{{ post.content|truncatewords:15 }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            {% if profile.user == user %}
+                                            <div class="btn-group">
+                                                <a href="{% url 'blog_detail' id=post.id %}" class="btn btn-sm btn-outline-secondary">View</a>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#EditPostModal_{{ post.id }}">Edit</button>
+                                            </div>
+                                            {% endif %}
+                                            <small class="text-body-secondary text-center">{{ post.created_at|date:"d-M-Y H:i:A" }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- EDIT POST MODAL STARTS -->
+                            <div class="modal fade modal-xl" id="EditPostModal_{{ post.id }}" tabindex="-1" aria-labelledby="EditPostModalLabel_{{ post.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5 fw-bolder" id="EditPostModalLabel_{{ post.id }}">Edit Post</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form class="p-2" method="POST" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="edit_post_id" value="{{ post.id }}" />
+                                                
+                                                <div class="mb-3">
+                                                    <label for="id_title_{{ post.id }}" class="form-label">Post Title</label>
+                                                    <input type="text" class="form-control" id="id_edit_title_{{ post.id }}" name="title" value="{{ post.title }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="id_content_{{ post.id }}" class="form-label">Post Content</label>
+                                                    <textarea class="form-control" id="id_edit_content_{{ post.id }}" name="content" rows="4" required>{{ post.content }}</textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="id_image_{{ post.id }}" class="form-label">Post Image (Optional)</label>
+                                                    <input type="file" class="form-control" id="id_edit_image_{{ post.id }}" name="image" accept="image/*">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="id_edit_category_{{ post.id }}" class="form-label">Category</label>
+                                                    <select class="form-select" id="id_category_{{ post.id }}" name="category" required>
+                                                        <option value="Personal Stories & Experiences" {% if post.category == "Personal Stories & Experiences" %}selected{% endif %}>Personal Stories & Experiences</option>
+                                                        <option value="Cultural & Social Commentary" {% if post.category == "Cultural & Social Commentary" %}selected{% endif %}>Cultural & Social Commentary</option>
+                                                        <option value="Futuristic & Visionary Ideas" {% if post.category == "Futuristic & Visionary Ideas" %}selected{% endif %}>Futuristic & Visionary Ideas</option>
+                                                        <option value="Inspiration & Motivation" {% if post.category == "Inspiration & Motivation" %}selected{% endif %}>Inspiration & Motivation</option>
+                                                        <option value="Philosophical & Deep Thought Pieces" {% if post.category == "Philosophical & Deep Thought Pieces" %}selected{% endif %}>Philosophical & Deep Thought Pieces</option>
+                                                        <option value="Book Reviews & Recommendations" {% if post.category == "Book Reviews & Recommendations" %}selected{% endif %}>Book Reviews & Recommendations</option>
+                                                        <option value="Travel & Cultural Exploration" {% if post.category == "Travel & Cultural Exploration" %}selected{% endif %}>Travel & Cultural Exploration</option>
+                                                    </select>
+                                                </div>
+                                                <button type="submit" name="edit_post" class="btn btn-primary">Save Changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- EDIT POST MODAL ENDS -->
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center text-primary-emphasis">You haven't created any posts yet.</p>
+                    {% endif %}
+                    </div>
+                </div>
+
+
+                <!-- DISPLAYING USER'S SAVED BLOG POSTS -->
+                <div class="tab-pane fade" id="saved-posts">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-2">
+                        {% for post in saved_posts %}
+                            <div class="col">
+                                <div class="card shadow-sm">
+                                    {% if post.image %}
+                                        <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ post.image.url }}" />
+                                    {% else %}
+                                        <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{% static 'images/favicon.png' %}" />
+                                    {% endif %}
+
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center fw-bold">{{ post.title }}</h5>
+                                        <div class="icon-row row p-1">
+                                            <div class="icon col text-end">
+                                                {{ post.like_count }} <i class="fas fa-heart" style="color: red;"></i> <!-- HEART ICON -->
+                                            </div>
+                                            <div class="icon col text-start">
+                                                {{ post.comments.count  }} <i class="far fa-comment"></i> <!-- COMMENT ICON -->
+                                            </div>
+                                          </div>
+                                        <p class="card-text">{{ post.content|truncatewords:15 }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            {% if profile.user == user %}
+                                            <div class="btn-group">
+                                                <a href="{% url 'blog_detail' id=post.id %}" class="btn btn-sm btn-outline-secondary">View</a>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#EditPostModal_{{ post.id }}">Edit</button>
+                                            </div>
+                                            {% endif %}
+                                            <small class="text-body-secondary text-center">{{ post.created_at|date:"d-M-Y H:i:A" }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>You have no saved posts yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About{% endblock %}
+{% block css %}
+
+/* FLIP CARD STYLING */
+.flip-card {
+width: 100%;
+height: 300px; /* Fixed height */
+perspective: 1000px; /* Perspective for 3D effect */
+}
+
+.flip-card-inner {
+position: relative;
+width: 100%;
+height: 100%;
+transform-style: preserve-3d;
+transition: transform 0.6s;
+}
+
+.flip-card:hover .flip-card-inner {
+transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+position: absolute;
+width: 100%;
+height: 100%;
+backface-visibility: hidden;
+}
+
+/* FRONT PART OF FLIP-CARD STYLING */
+.flip-card-front {
+background-color: var(--soft-white);
+border: 2px solid var(--warm-gold);
+color: #b18f07a1;
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 20px;
+font-weight: bold;
+}
+
+/* BACK PART OF FLIP-CARD STYLING */
+.flip-card-back {
+background: linear-gradient(to bottom right, var(--warm-gold), #FF6347);
+color: var(--soft-white);
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 18px;
+font-weight: normal;
+transform: rotateY(180deg);
+overflow-y: auto;
+scrollbar-width: none;
+padding: 10px;
+box-sizing: border-box;
+}
+
+/* REMOVING DISPLAY OF SCROLLBAR FOR WEBKIT BROWSERS */
+.flip-card-back::-webkit-scrollbar {
+display: none;
+}
+
+/* MEDIA QUERIES FOR PROPER RESPONSIVENESS OF FLIP-CARDS */
+@media (max-width: 450px) {
+    .flip-card-back {
+        padding-top: 5rem;
+    }
+}
+
+@media (min-width: 770px) and (max-width: 982px) {
+    .flip-card-back {
+        padding-top: 15rem;
+    }
+}
+
+@media (min-width: 1100px) and (max-width: 1200px) {
+    .flip-card-back {
+        padding-top: 5rem;
+    }
+}
+
+.col {
+flex: 1;
+padding: 10px;
+}
+
+{% endblock %}
+{% block body %}
+<div class="container-fluid p-4">
+    <!-- ABOUT CARDS STARTS -->
+    <div class="container">
+        <br>
+        <div class="row featurette shadow border rounded p-4">
+            <div class="col-md-9">
+                <h2 class="featurette-heading fw-bold lh-1">About Visions & Voices: <span class="fw-normal fs-3">Stories
+                        that Shape Our World</span></h2>
+                <p class="lead pt-2">Welcome to Visions & Voices, a space dedicated to sharing the stories, ideas, and
+                    experiences that inspire change, challenge perspectives, and shape our world. Our mission is simple:
+                    to amplify the voices of those who are shaping the future and to celebrate the visions that guide us
+                    toward a better tomorrow.
+                </p>
+            </div>
+            <div class="col-md-3 p-4 d-flex jusify-content-center">
+                <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="300"
+                    height="400" src="{% static 'images/about1.png' %}" />
+            </div>
+        </div>
+        <br><br>
+        <div class="row featurette shadow border rounded p-4">
+            <div class="col-md-9 order-md-2">
+                <h2 class="featurette-heading fw-bold lh-1">Voices That Inspire, Stories That Connect</h2>
+                <p class="lead pt-2">At Visions & Voices, we believe in the power of storytelling to connect us, inspire
+                    us, and push us to think beyond the ordinary. Whether it’s through personal narratives, deep
+                    reflections, or bold ideas, we offer a platform for voices that matter and visions that inspire.
+                    Here, you'll find a mix of content that sparks conversation, opens minds, and challenges the status
+                    quo.
+                </p>
+            </div>
+            <div class="col-md-3 order-md-1 p-4 d-flex jusify-content-center">
+                <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="300"
+                    height="400" src="{% static 'images/about2.jpg' %}" />
+            </div>
+        </div>
+        <!-- ABOUT CARDS ENDS -->
+        <br><br>
+        <!--  CONTENT INFO CONTAINER STARTS -->
+        <div class="row featurette shadow rounded p-4">
+            <div class="col-md-9">
+                <h2 class="featurette-heading fw-bold lh-1">Visions & Voices is more than just a blog</h2>
+                <p class="lead pt-2">It’s a community of thinkers, dreamers, and doers. Here, we believe that everyone
+                    has a story worth sharing and a vision worth hearing. Whether you’re seeking inspiration, knowledge,
+                    or simply a new perspective, we invite you to explore, engage, and become part of a global
+                    conversation that matters.</p>
+            </div>
+            <div class="col-md-3 p-4 d-flex jusify-content-center">
+                <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="300"
+                    height="400" src="{% static 'images/about3.jpg' %}" />
+            </div>
+        </div>
+        <br><br>
+        <div class="row featurette shadow border rounded p-4">
+            <div class="col-md-9 order-md-2">
+                <h2 class="featurette-heading fw-bold lh-1">Sharing Stories, Opening Minds</h2>
+                <p class="lead pt-2">
+                    At Visions & Voices, we believe that sharing stories helps us learn from each other and see the
+                    world in
+                    new ways. Our platform is a place where everyone’s voice is heard, and where different ideas can
+                    spark
+                    conversations. Whether it's a personal story or a big idea, we aim to inspire and encourage new ways
+                    of
+                    thinking. Every story shared has the power to make a difference.</p>
+            </div>
+            <div class="col-md-3 order-md-1 d-flex jusify-content-center">
+                <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="300"
+                    height="400" src="{% static 'images/about4.jpg' %}" />
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="container">
+        <h2 class="featurette-heading fw-bold lh-1 pb-2">What You'll Find Here</h2>
+        <div class="row g-4">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front text-center">
+                            Personal Stories & Experiences
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="lead text-center">Dive into raw, authentic narratives of personal journeys—whether
+                                it's the transformative power of travel,
+                                intimate interviews with change-makers, or inspiring stories that show the strength of
+                                the human spirit.
+                                These stories remind us that we’re all on a shared path of growth and discovery.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front text-center">
+                            Cultural & Social Commentary
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="lead text-center">Here, we explore the world around us, reflecting on cultural
+                                trends, societal shifts, and the ever-evolving global landscape. We bring you thoughtful
+                                commentary on current events, movements for social justice, and how society's evolving
+                                voice is creating a more inclusive future.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front text-center">
+                            Futuristic & Visionary Ideas
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="lead text-center">What does the future hold? This section looks toward tomorrow, bringing bold and visionary ideas that could change the way we live, work, and connect. From technological innovations to social transformations, we’ll explore the ideas that are redefining the boundaries of possibility.                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row g-4">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front text-center">
+                            Inspiration & Motivation
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="lead text-center">Everyone needs a little push now or then. Our collection of inspiring stories and motivational articles celebrates resilience, perseverance, and triumph. Whether you’re looking to overcome personal challenges or ignite a spark of creativity, these posts are here to help you take that next step.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front text-center">
+                            Philosophical & Deep Thought Pieces
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="lead text-center">For those who enjoy diving into life’s big questions, this category offers a space for philosophical reflections and deep thought. We explore the nature of existence, purpose, and the human experience, inviting readers to question, reflect, and ponder what truly matters in life.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front text-center">
+                            Book Reviews & Recommendations
+                        </div>
+                        <div class="flip-card-back px-4">
+                            <p class="lead text-center">Books have the power to shape minds and influence the world. In this section, we review and recommend must-read books that explore themes of personal growth, societal change, and the visionary ideas that inspire progress. Find your next great read right here!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row g-4 d-flex">
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front text-center">
+                            Travel & Cultural Exploration
+                        </div>
+                        <div class="flip-card-back">
+                            <p class="lead text-center">Travel isn’t just about seeing new places—it’s about connecting with new perspectives. This section highlights journeys around the world, uncovering diverse cultures, hidden gems, and the stories of people making an impact locally and globally. It's a celebration of the beautiful diversity that shapes our global community.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-8">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front text-center">
+                            We’re so glad you’re here
+                        </div>
+                        <div class="flip-card-back">
+                                <p class="lead text-center">Join us in sharing the stories that will shape our world.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  CONTENT INFO CONTAINER ENDS -->
+    <br><br>
+    <div class="container mb-4">
+        <div class="row featurette shadow border rounded p-4">
+            <div class="col-md-9">
+                <h2 class="featurette-heading fw-bold lh-1">WHY VISIONS & VOICES </h2>
+                <p class="lead pt-2">Welcome to Visions & Voices, a space dedicated to sharing the stories, ideas, and
+                    experiences that inspire change, challenge perspectives, and shape our world. Our mission is simple:
+                    to amplify the voices of those who are shaping the future and to celebrate the visions that guide us
+                    toward a better tomorrow.
+                </p>
+            </div>
+            <div class="col-md-3 p-4 d-flex jusify-content-center">
+                <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="300"
+                    height="400" src="{% static 'images/logo1.png' %}" />
+            </div>
+        </div>
+        <br><br>
+        <div class="row featurette shadow border rounded p-4">
+            <div class="col-md-9 order-md-2">
+                <h2 class="featurette-heading fw-bold lh-1">WHAT I HOPE TO ACHIEVE</h2>
+                <p class="lead pt-2">My vision for this blog is simple: to create a community of like-minded individuals who value meaningful conversations, diverse perspectives, and the power of storytelling. I want this blog to be a place where ideas flow freely, where everyone is encouraged to share their thoughts, and where we can all learn from each other’s experiences.
+                    We all have a story to tell, a vision to share, and a voice that deserves to be heard. I invite you to join me on this journey as we explore the world through the eyes of those shaping it, one story at a time.
+                </p>
+            </div>
+            <div class="col-md-3 order-md-1 p-4 d-flex jusify-content-center">
+                <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="300"
+                    height="400" src="{% static 'images/favicon.png' %}" />
+            </div>
+        </div>
+    </div>
+</div>
+    {% endblock %}

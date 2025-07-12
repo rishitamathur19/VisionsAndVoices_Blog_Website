@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Explore{% endblock %}
+{% block body %}
+
+<div class="container px-4 pt-5" id="custom-cards">
+    <h2 class="pb-2 border-bottom">Most Popular</h2>
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-3">
+        {% for post in recent_posts|slice:":3" %}
+        <div class="col">
+            {% if post.image %}
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+                style="background-image: url('{{ post.image.url }}'); background-size: cover; background-repeat: no-repeat;">
+            {% else %}
+            <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+                style="background-image: url('{% static 'images/favicon.png' %}'); background-size: cover; background-repeat: no-repeat;">
+            {% endif %}
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-light text-shadow-1">
+                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">{{ post.title }}</h3>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="me-auto">
+                            <small>@{{ post.user.username }}</small>
+                        </li>
+                        <li class="d-flex align-items-center me-3">
+                            <div class="icon-row row">
+                                <div class="icon col text-end">
+                                    {{ post.like_count }} <i class="fas fa-heart" style="color: red;"></i> <!-- HEART ICON -->
+                                </div>
+                                <div class="icon col text-start">
+                                    {{ post.like_count }} <i class="far fa-comment"></i> <!-- COMMENT ICON -->
+                                </div>
+                              </div>
+                        </li>
+                        <li class="d-flex align-items-center">
+                            <small>{{ post.created_at|date:"d-m-y" }}</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- RECENT UPDATES CONTAINER STARTS -->
+<div class="container">
+    <div class="my-3 p-3 bg-body rounded shadow-lg">
+        <h3 class="border-bottom pb-2 mb-0">Recent updates</h3>
+        {% for post in recent_posts|slice:":3"  %}
+        <div class="d-flex text-body-secondary pt-4">
+            {% if post.image %}
+                <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="70" height="50" src="{{ post.image.url }}" alt="{{ post.title }}" />
+            {% else %}
+                <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="70" height="50" src="{% static 'images/favicon.png' %}" alt="Default image" />
+            {% endif %}
+            <p class="pb-3 mb-0 small lh-sm border-bottom">
+                <strong class="d-block text-gray-dark">{{ post.title }}</strong>
+                <span class="d-block text-gray pb-2">@{{ post.user.username }}</span>
+                {{ post.content|slice:":140" }}... <a href="{% url 'blog_detail' id=post.id  %}">Read more</a>
+            </p>
+        </div>
+    {% endfor %}
+    
+        <small class="d-block text-end mt-3">
+            <a href="" data-bs-toggle="modal" data-bs-target="#updatesModal">All Updates</a>
+        </small>
+    </div>
+    <!-- RECENT UPDATES MODAL -->
+    <div class="modal fade modal-xl" id="updatesModal" tabindex="-1" aria-labelledby="updatesModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 fw-bolder" id="updatesModalLabel">Recent Updates</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% for post in recent_posts %}
+        <div class="d-flex text-body-secondary my-4 mx-2">
+            {% if post.image %}
+                <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="70" height="50" src="{{ post.image.url }}" alt="{{ post.title }}" />
+            {% else %}
+                <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="70" height="50" src="{% static 'images/favicon.png' %}" alt="Default image" />
+            {% endif %}
+            <p class="pb-3 mb-0 small lh-sm border-bottom">
+                <strong class="d-block text-gray-dark">{{ post.title }}</strong>
+                <span class="d-block text-gray pb-2">@{{ post.user.username }}</span>
+                {{ post.content|slice:":140" }}... <a href="{% url 'blog_detail' id=post.id  %}">Read more</a>
+            </p>
+        </div>
+    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- RECENT UPDATES CONTAINER ENDS -->
+
+<!-- BLOGGERS CONTAINER STARTS -->
+<div class="container my-4">
+    <div class="my-3 p-3 bg-body rounded shadow-lg">
+        <h3 class="border-bottom pb-2 mb-0">Bloggers</h3>
+        {% for blog_user in users|slice:":3"  %}
+    <div class="d-flex text-body-secondary pt-3">
+        <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="70" height="50" src="{{ blog_user.profile_image.url }}" />
+        <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+            <div class="d-flex justify-content-between">
+                <strong class="text-gray-dark">{{ blog_user.name }}</strong>
+                <a href="{% url 'user_profile' username=blog_user.user.username %}">View Profile</a>
+            </div>
+            <span class="d-block">@{{ blog_user.user.username }}</span>
+        </div>
+    </div>
+{% endfor %}
+
+        <small class="d-block text-end mt-3">
+            <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">View More</a>
+        </small>
+    </div>
+    <!-- BLOGGERS MODAL -->
+    <div class="modal fade modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 fw-bolder" id="exampleModalLabel">Bloggers</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% for blog_user in users %}
+    <div class="d-flex text-body-secondary pt-3">
+        <img class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="70" height="50" src="{{ blog_user.profile_image.url }}" />
+        <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+            <div class="d-flex justify-content-between">
+                <strong class="text-gray-dark">{{ blog_user.name }}</strong>
+                <a href="{% url 'user_profile' username=blog_user.user.username %}">View Profile</a>
+            </div>
+            <span class="d-block">@{{ blog_user.user.username }}</span>
+        </div>
+    </div>
+{% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Blog{% endblock %}
+{% block css %}
+/* BLOG POST STYLING */
+.blog-post-title {
+    font-size: 3rem;
+    color: var(--deep-blue);
+    font-weight: bold;
+}
+
+.blog-post-meta {
+    font-size: 1rem;
+    color: var(--muted-gray);
+}
+
+.blog-post-content {
+    font-size: 1.2rem;
+    line-height: 1.8;   
+    margin-top: 20px;
+}
+
+.blog-post-content p {
+    margin-bottom: 20px;
+}
+
+.blog-post-footer {
+    background-color: var(--soft-white);
+    border-top: 2px solid var(--muted-gray);
+    font-size: 1rem;
+    color: var(--muted-gray);
+}
+
+/* SIDEBAR STYLING */
+.sidebar {
+    background-color: var(--soft-white);
+    padding: 20px;
+    border: 1px solid var(--muted-gray);
+    margin-top: 20px;
+}
+
+.sidebar h4 {
+    color: var(--deep-blue);
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    color: var(--deep-blue);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.sidebar a:hover {
+    color: var(--warm-gold);
+}
+
+/* LIKE ICON STYLING */
+#heart {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+/* UNLIKED STATE */
+#heart.outlined {
+    background-color: transparent;
+}
+
+/* LIKED STATE */
+#heart.liked {
+    color: red;
+    border: none;
+    transform: scale(1.2);
+}
+
+/* ON CLICK ANIMATION */
+@keyframes bounce {
+    0% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(1.2);
+    }
+    50% {
+        transform: scale(1);
+    }
+}
+
+#heart.liked {
+    animation: bounce 0.5s ease;
+}
+
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid px-lg-5 px-md-3 my-5">
+  <div class="row px-lg-2 px-md-2">
+      <!-- DISPLAY POST FROM URL CONTAINER STARTS -->
+        {% if post %}
+        <div class="col-md-8">
+            <div class="blog-post">
+                <h1 class="blog-post-title">{{ post.title }}</h1>
+                <p class="blog-post-meta">Written by {{ post.user.username }} | {{ post.created_at|date:"d-M-Y H:i:A" }} | {{ post.category }}</p>
+                
+                <div class="post-icons">
+                    <span id="like-count">{{ post.like_count }}</span>
+                    <i class="fas fa-heart pe-3" id="heart" data-post-id="{{ post.id }}"></i> <!-- HEART ICON -->
+                    {{ post.comments.count }} <i class="far fa-comment pe-3"></i> <!-- COMMENT ICON -->
+                    <i class="fa-bookmark {% if post.is_bookmarked %}fas{% else %}far{% endif %}" id="bookmark" data-post-id="{{ post.id }}"></i>  <!-- BOOKMARK ICON -->
+                </div>
+
+                <div class="blog-post-content">
+                  {% if post.image %}
+                  <img src="{{ post.image.url }}" class="card-img-top border" alt="{{ post.title }}" style="object-fit:fill; height: 250px;">
+            {% else %}
+                  <img src="{% static 'images/favicon.png' %}" class="card-img-top border" alt="{{ post.title }}" style="object-fill: contain; height: 250px;" />
+            {% endif %}
+                    <p class="pt-4">{{ post.content }}</p>
+                </div>
+
+                <div class="blog-post-footer">
+                    <p class="text-center pt-3">Feel free to leave your thoughts in the comments section below!</p>
+                    
+                    <!-- Display the comment form -->
+                    <form method="POST" class="mt-3">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_content" class="form-label">Your Comment</label>
+                            {{ form.content }}
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3 d-inline-block me-auto">Post Comment</button>
+                    </form>
+                
+                    <div class="comments-section mt-5">
+                        <h4 class="fw-bold text-dark">Comments</h4>
+    {% for comment in comments %}
+        <div class="comment text-dark">
+            {% if profile.profile_image %}
+                <img class="bd-placeholder-img border border-2 rounded-circle" width="50" height="35" src="{{ profile.profile_image.url }}" alt="Profile Image" />
+            {% else %}
+                <img class="bd-placeholder-img border border-2 rounded-circle" width="50" height="35" src="{% static 'images/favicon.png' %}" alt="Default image" />
+            {% endif %}
+            <span><strong>{{ comment.user.username }}</strong>  • {{ comment.created_at|timesince }} ago</span>
+            <p class="ms-5 ps-2">{{ comment.content }}</p>
+        </div>
+    {% empty %}
+        <p>No comments yet. Be the first to comment!</p>
+    {% endfor %}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <!-- SIDEBAR STARTS HERE -->
+        <div class="col-md-4">
+            <div class="sidebar">
+                <h4 class="fw-bold">Related Posts</h4>
+                {% for related_post in related_posts %}
+                    <a href="{% url 'blog_detail' id=related_post.id %}">{{ related_post.title }}</a>
+                {% empty %}
+                    <p>No related posts available.</p>
+                {% endfor %}
+
+                <h4 class="mt-5 fw-bold">Recent Posts</h4>
+                {% for recent_post in recent_posts %}
+                    <a href="{% url 'blog_detail' id=recent_post.id %}">{{ recent_post.title }}</a>
+                {% empty %}
+                    <p>No recent posts available.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- SIDEBAR STARTS ENDS -->
+        <!-- DISPLAY POST FROM URL CONTAINER END -->
+        <!-- DISPLAY ALL BLOG POST CONTAINER STARTS -->
+        {% else %}
+        <div class="container">
+          <h1 class="fw-bold pb-2">All Blog Posts</h1>
+          <div class="row">
+              {% for blog_post in posts %}
+                  <div class="col-12 col-sm-6 col-md-4 mb-4">
+                      <div class="card h-100">
+                        {% if blog_post.image %}
+                              <img src="{{ blog_post.image.url }}" class="card-img-top border" alt="{{ blog_post.title }}" style="object-fit:contain; height: 200px;">
+                        {% else %}
+                              <img src="{% static 'images/favicon.png' %}" class="card-img-top border" alt="{{ blog_post.title }}" style="object-fit: contain; height: 200px;" />
+                        {% endif %}
+                          <div class="card-body d-flex flex-column">
+                              <h5 class="card-title fw-bold">{{ blog_post.title }}</h5>
+                              <br>
+                              <p class="card-text">{{ blog_post.content|truncatewords:10 }}</p>
+                              <p><strong>Category:</strong><br> {{ blog_post.category }}</p>
+                              <p><strong>Created at:</strong><br> {{ blog_post.created_at|date:"F j, Y, g:i A" }}</p>
+                              <a href="{% url 'blog_detail' id=blog_post.id %}" class="btn btn-primary mt-auto">View Post</a>
+                          </div>
+                      </div>
+                  </div>
+              {% endfor %}
+          </div>
+      </div>
+      {% endif %}
+      <!-- DISPLAY ALL BLOG POST CONTAINER ENDS -->
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+// LIKE FUNCTIONALITY
+const heart = document.getElementById('heart');
+
+heart.addEventListener('click', function() {
+  const postId = heart.getAttribute('data-post-id');
+
+  if (heart.classList.contains('outlined')) {
+    heart.classList.remove('outlined');
+    heart.classList.add('liked');
+    
+    // SEND REQUEST TO LIKE THE POST
+    fetch(`/post/${postId}/like/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value, 
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'liked') {
+        document.getElementById('like-count').textContent = data.like_count;  // UPDATE THE LIKE COUNT
+      }
+    });
+    
+  } else {
+    heart.classList.remove('liked');
+    heart.classList.add('outlined');
+    
+    // SEND REQUEST TO UNLIKE THE POST
+    fetch(`/post/${postId}/unlike/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'unliked') {
+        document.getElementById('like-count').textContent = data.like_count;  // UPDATE THE LIKE COUNT
+      }
+    });
+  }
+});
+heart.classList.add('outlined');
+
+// SAVE FUNCTIONALITY
+const bookmarkIcons = document.querySelectorAll('#bookmark');
+
+bookmarkIcons.forEach(icon => {
+  icon.addEventListener('click', function() {
+    const postId = this.getAttribute('data-post-id');
+    const isBookmarked = this.classList.contains('fas');
+
+    if (isBookmarked) {
+      // IF IT IS ALREADY BOOKMARKED, UNBOOKMARK IT
+      fetch(`/post/${postId}/unbookmark/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'unbookmarked') {
+          this.classList.remove('fas');
+          this.classList.add('far');
+        }
+      });
+    } else {
+      // IF IT IS NOT BOOKMARKED, BOOKMARK IT
+      fetch(`/post/${postId}/bookmark/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'bookmarked') {
+          this.classList.remove('far');
+          this.classList.add('fas');
+        }
+      });
+    }
+  });
+});
+</script>
+{% endblock %}

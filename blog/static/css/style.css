@@ -1,0 +1,35 @@
+/* PRIMARY COLOURS FOR THE THEME */
+:root {
+    --deep-blue: #1E3A8A;
+    --warm-gold: #F1C40F;
+    --soft-white: #F8F9FA;
+    --muted-gray: #B0B0B0;
+    --pastel-coral: #FF6F61;
+    --teal: #4DB6AC;
+}
+
+/* BODY STYLING */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--soft-white);
+    color: var(--deep-blue);
+}
+
+/* NAVBAR STYLING */
+.navbar a {
+    color: var(--soft-white);
+}
+
+.navbar a:hover {
+    color: var(--warm-gold);
+}
+
+.navbar .nav-link.active {
+    color: var(--warm-gold);
+}
+
+/* NAVBAR DROPDOWN STYLING FOR CATEGORIES */
+.dropdown-item:hover {
+    background-color: transparent;
+    color: var(--warm-gold);
+}
